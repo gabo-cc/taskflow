@@ -1,0 +1,22 @@
+# Use Amplify static hosting (platform WEB), not the Next.js SSR preset.
+# The platform is selected in AWS; this buildspec only defines build artifacts.
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - nvm install 22
+        - nvm use 22
+        - npm ci --cache .npm --prefer-offline
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    # Serve the static export, without a Next.js server in production.
+    baseDirectory: out
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .npm/**/*
+      - .next/cache/**/*
